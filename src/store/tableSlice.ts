@@ -21,6 +21,30 @@ export const loadTableData = createAsyncThunk("table/loadTableData", async (_, t
   }
 });
 
+export const createItem = createAsyncThunk("table/createItem", async (item: Omit<TableItem, "id">, thunkAPI) => {
+  try {
+    return await createTableItem(item);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const updateItem = createAsyncThunk("table/updateItem", async (updatedItem: TableItem, thunkAPI) => {
+  try {
+    return await updateTableItem(updatedItem.id, updatedItem);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const deleteItem = createAsyncThunk("table/deleteItem", async (id: string, thunkAPI) => {
+  try {
+    return await deleteTableItem(id);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
 const tableSlice = createSlice({
   name: "table",
   initialState,
@@ -38,6 +62,18 @@ const tableSlice = createSlice({
       .addCase(loadTableData.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(createItem.fulfilled, (state, action: PayloadAction<TableItem>) => {
+        state.data.push(action.payload);
+      })
+      .addCase(updateItem.fulfilled, (state, action: PayloadAction<TableItem>) => {
+        const index = state.data.findIndex(item => item.id === action.payload.id);
+        if (index !== -1) {
+          state.data[index] = action.payload;
+        }
+      })
+      .addCase(deleteItem.fulfilled, (state, action: PayloadAction<string>) => {
+        state.data = state.data.filter(item => item.id !== action.payload);
       });
   },
 });

@@ -2,14 +2,14 @@ import api from "./api";
 
 export interface TableItem {
   id: string;
-  companySigDate: string;
-  companySignatureName: string;
   documentName: string;
   documentStatus: string;
   documentType: string;
+  companySignatureName: string;
+  companySigDate: string;
   employeeNumber: string;
-  employeeSigDate: string;
   employeeSignatureName: string;
+  employeeSigDate: string;
 }
 
 export const fetchTableData = async (): Promise<TableItem[]> => {
