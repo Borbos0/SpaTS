@@ -74,8 +74,9 @@ const DataTable: React.FC = () => {
 
   const handleSave = () => {
     if (editMode && editId) {
-      dispatch(updateItem({ id: editId, ...currentItem }));
-      dispatch(loadTableData());
+      dispatch(updateItem({ id: editId, ...currentItem })).then(() => {
+        dispatch(loadTableData());
+      });
     } else {
       dispatch(createItem(currentItem)).then(() => {
         dispatch(loadTableData());
@@ -86,8 +87,9 @@ const DataTable: React.FC = () => {
   
 
   const handleDelete = (id: string) => {
-    dispatch(deleteItem(id));
-    dispatch(loadTableData());
+    dispatch(deleteItem(id)).then(() => {
+        dispatch(loadTableData());
+    });
   };
 
   return (
